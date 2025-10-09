@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>114739038272-e2egbjiccd1a2eetpnqibfhn46ouuk4f.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.114739038272-e2egbjiccd1a2eetpnqibfhn46ouuk4f</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>114739038272-vbhgp3skv93m7f4fidoit491o8atlq38.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBXEw7soKfRidrHYwVOawTPpb14v6CFULQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>114739038272</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.healthApp</string>
+	<key>PROJECT_ID</key>
+	<string>palliative-care-applicat-c4316</string>
+	<key>STORAGE_BUCKET</key>
+	<string>palliative-care-applicat-c4316.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:114739038272:ios:df07f5d5f91b43c33837a5</string>
+</dict>
+</plist>
