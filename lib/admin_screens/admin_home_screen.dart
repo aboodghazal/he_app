@@ -1,13 +1,39 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_app/colors.dart';
 import 'package:health_app/controller/admin_home_controller.dart';
+import 'package:health_app/models/article_model.dart';
+// ignore: unused_import
+import 'package:health_app/screens/article.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_route.dart';
 import '../widgets/article_admin_item.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
+  Future<void> deleteArticle(BuildContext context, ArticleModel article) async {
+    try {
+      // Delete article from Firestore
+      await FirebaseFirestore.instance
+          .collection('articles')
+          .doc(article.id)
+          .delete();
+
+      // Delete image from Storage if exists
+      if (article.imageURL != null && article.imageURL!.isNotEmpty) {
+        final ref = FirebaseStorage.instance.refFromURL(article.imageURL!);
+        await ref.delete();
+      }
+
+      Get.snackbar("تم الحذف", "تم حذف المقال بنجاح",
+          backgroundColor: Colors.green.shade100);
+    } catch (e) {
+      Get.snackbar("خطأ", "فشل حذف المقال: $e",
+          backgroundColor: Colors.red.shade100);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +113,11 @@ class AdminHomeScreen extends StatelessWidget {
                       final article = controller.articlesList[index];
                       return AdminArticleView(
                         article: article,
+                        delete: () {
+                          deleteArticle(context, article);
+                          controller.articlesList.remove(article);
+                          controller.articlesList.refresh();
+                        },
                       );
                     },
                   )),

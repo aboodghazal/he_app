@@ -14,5 +14,7 @@ class AppRoute {
   static const String showArticle = '/show-article';
   static const String editArticle = '/edit-article';
   static const String editvideo = '/edit-video';
+  static const String forgetPassword = '/forget_pass';
+
 
 }

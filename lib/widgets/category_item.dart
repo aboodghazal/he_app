@@ -35,6 +35,7 @@ class CategoryItemState extends State<CategoryItem> {
             .add(ArticleModel.fromFirestore(article.data(), article.id));
       }
     }
+    
     setState(() {
       articlesList;
     });

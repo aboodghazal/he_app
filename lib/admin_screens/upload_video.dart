@@ -166,20 +166,6 @@ class UploadVideoScreenState extends State<UploadVideoScreen> {
                     onTap: () {
                       uploadImage();
                     }),
-
-                // GestureDetector(
-                //   onTap: () {
-                //
-                //   },
-
-                // ),
-                //
-                // Container(
-                //   height: 240,
-                //   child: const Image(
-                //     image: NetworkImage(''),
-                //   ),
-                // )
               ),
               const SizedBox(height: 20),
               Form(

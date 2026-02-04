@@ -43,21 +43,25 @@ class SearchScreenState extends State<SearchScreen> {
     super.initState();
   }
 
-
   onSearch(String search) {
     setState(() {
-      foundedUsers = usersList.where((user) => user['fullname'].toString().toLowerCase().contains(search.toLowerCase())).toList();
+      foundedUsers = usersList
+          .where((user) => user['fullname']
+              .toString()
+              .toLowerCase()
+              .contains(search.toLowerCase()))
+          .toList();
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
     // setState(() {
     //   isLoading = true;
     // });
 
-      // Timer(const Duration(seconds: 2), ()  async {
-      // });
+    // Timer(const Duration(seconds: 2), ()  async {
+    // });
 
     return Scaffold(
         body: Container(
@@ -119,50 +123,55 @@ class SearchScreenState extends State<SearchScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                      TextField(
-                        autocorrect: false,
-                        onChanged: (val) {
-                          onSearch(val);
-                        },
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                    TextField(
+                      autocorrect: false,
+                      onChanged: (val) {
+                        onSearch(val);
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 20),
                           filled: true,
-                          prefixIcon: const Icon(Icons.search, color: Color(0xFF495057), size: 30),
+                          prefixIcon: const Icon(Icons.search,
+                              color: Color(0xFF495057), size: 30),
                           fillColor: const Color(0xFFDBE8E8),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none
-                          ),
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none),
                           hintText: 'البحث عن شخص معين ..',
                           hintStyle: const TextStyle(
                             fontSize: 22,
                             color: Color(0xFF495057),
-                          )
-                        ),
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: Color(0xFF495057)
-                        ),
-                        cursorColor: const Color(0xFF495057),
-                      ),
-
+                          )),
+                      style: const TextStyle(
+                          fontSize: 22, color: Color(0xFF495057)),
+                      cursorColor: const Color(0xFF495057),
+                    ),
                     const SizedBox(height: 30),
-
                     SizedBox(
                       height: 500,
-                      child: isLoading ? const Spinner() : foundedUsers.isEmpty ? const Center(
-                        child: Text('لا يوجد أي نتائج مطابقة', style:
-                        TextStyle(
-                            fontSize: 22,
-                            color: Color(0xFF495057)
-                        ),),
-                      ) : ListView.builder(
-                        itemCount: foundedUsers.length,
-                        itemBuilder: (context, index) {
-                          return SearchUser(name: foundedUsers[index]['fullname'], email: foundedUsers[index]['email'], imageURL: foundedUsers[index]['avatar'], phone: foundedUsers[index]['phone'], dateOfBirth: foundedUsers[index]['dateOfBirth']);
-                        },
-                        padding: const EdgeInsets.all(0),
-                      ),
+                      child: isLoading
+                          ? const Spinner()
+                          : foundedUsers.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    'لا يوجد أي نتائج مطابقة',
+                                    style: TextStyle(
+                                        fontSize: 22, color: Color(0xFF495057)),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  itemCount: foundedUsers.length,
+                                  itemBuilder: (context, index) {
+                                    return SearchUser(
+                                        name: foundedUsers[index]['fullname']??"",
+                                        email:  foundedUsers[index]['email']??"",
+                                        imageURL: foundedUsers[index]['avatar']??"",
+                                        phone: foundedUsers[index]['phone']??"",
+                                        dateOfBirth: foundedUsers[index]['dateOfBirth']??"");
+                                  },
+                                  padding: const EdgeInsets.all(0),
+                                ),
                     ),
                   ],
                 ),

@@ -9,31 +9,11 @@ import '../utils/app_route.dart';
 
 class AdminArticleView extends StatelessWidget {
   final ArticleModel article;
+  final Function delete;
 
-  const AdminArticleView({super.key, required this.article});
+  const AdminArticleView({super.key, required this.article,required this.delete});
 
-  Future<void> deleteArticle(BuildContext context) async {
-    try {
-      // Delete article from Firestore
-      await FirebaseFirestore.instance
-          .collection('articles')
-          .doc(article.id)
-          .delete();
-
-      // Delete image from Storage if exists
-      if (article.imageURL != null && article.imageURL!.isNotEmpty) {
-        final ref = FirebaseStorage.instance.refFromURL(article.imageURL!);
-        await ref.delete();
-      }
-
-      Get.snackbar("تم الحذف", "تم حذف المقال بنجاح",
-          backgroundColor: Colors.green.shade100);
-    } catch (e) {
-      Get.snackbar("خطأ", "فشل حذف المقال: $e",
-          backgroundColor: Colors.red.shade100);
-    }
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
     print(article.imageURL);
@@ -120,7 +100,7 @@ class AdminArticleView extends StatelessWidget {
                       titleTextStyle: const TextStyle(fontSize: 22),
                       desc: 'هل تريد حذف المقالة؟',
                       btnCancelOnPress: () async {
-                        await deleteArticle(context);
+                        delete();
                       },
                       btnOkText: 'إلغاء',
                       btnCancelText: 'حذف',

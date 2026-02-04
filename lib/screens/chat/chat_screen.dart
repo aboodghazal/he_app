@@ -1,69 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:health_app/controller/chat_controller.dart';
-// import '../../widgets/chat/chat_body.dart';
-// import '../../widgets/chat/chat_header.dart';
-
-// class ChatScreen extends StatefulWidget {
-//   const ChatScreen({super.key});
-
-//   @override
-//   State<StatefulWidget> createState() {
-//     return ChatScreenState();
-//   }
-// }
-
-// class ChatScreenState extends State<ChatScreen> {
-//   @override
-//   void initState() {
-//     print('chat screen');
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final routeArgument =
-//         ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-//     final name = routeArgument['name'];
-//     final avatar = routeArgument['avatar'];
-//     final userID = routeArgument['userID'];
-//     final chatID = routeArgument['chatID'];
-
-//     print('-------------> $userID');
-
-//     return Scaffold(
-//       backgroundColor: const Color(0xFF12706D),
-//       body: Container(
-//         padding: const EdgeInsets.only(top: 50),
-//         child: Stack(
-//           children: [
-//             Column(
-//               children: [
-//                 ChatHeader(name: name!),
-//                 Expanded(
-//                   child: ChatBody(
-//                     imageURL: avatar!,
-//                     userID: userID!,
-//                     chatID: chatID!,
-//                     // repository: ChatRepository(),
-//                   ),
-//                 ),
-//                 const SizedBox(
-//                   height: 120,
-//                 ),
-//               ],
-//             ),
-//             MessageEntryBox(
-//               userID: userID,
-//               userName: name,
-//               avatar: avatar,
-//               // repository: ChatRepository(),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -160,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+        ModalRoute.of(context)?.settings.arguments as Map<String,String?>;
 
     final name = routeArgs['name'] ?? 'User';
     final avatar = routeArgs['avatar'] ??
@@ -170,6 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final currentUserID = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true, // 👈 auto adjust when keyboard appears
       backgroundColor: const Color(0xFF12706D),
       body: Stack(
         children: [
@@ -189,51 +124,59 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(70),
                             topRight: Radius.circular(70))),
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: chatController.messagesStream(userID),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              "Start the conversation!",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          );
-                        }
-
-                        final messages = snapshot.data!.docs;
-
-                        return ListView.builder(
-                          reverse: true,
-                          controller: _scrollController,
-                          padding: const EdgeInsets.only(
-                            bottom: 90,
-                            left: 10,
-                            right: 10,
-                            top: 10,
-                          ),
-                          itemCount: messages.length,
-                          itemBuilder: (context, index) {
-                            final message = messages[index];
-                            final data = message.data() as Map<String, dynamic>;
-
-                            final isMe = data['senderID'] == currentUserID;
-                            return ItemChat(
-                              chat: isMe ? 0 : 1,
-                              avatar: isMe ? null : avatar,
-                              message: data['message'] ?? '',
-                              time: formatTimestamp(
-                                data['created_at'] ?? Timestamp.now(),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(70),
+                        topRight: Radius.circular(70),
+                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: chatController.messagesStream(userID),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                "Start the conversation!",
+                                style: TextStyle(color: Colors.grey),
                               ),
                             );
-                          },
-                        );
-                      },
+                          }
+
+                          final messages = snapshot.data!.docs;
+
+                          return ListView.builder(
+                            reverse: true,
+                            controller: _scrollController,
+                            padding: const EdgeInsets.only(
+                              bottom: 90,
+                              left: 10,
+                              right: 10,
+                              top: 10,
+                            ),
+                            itemCount: messages.length,
+                            itemBuilder: (context, index) {
+                              final message = messages[index];
+                              final data =
+                                  message.data() as Map<String, dynamic>;
+
+                              final isMe = data['senderID'] == currentUserID;
+                              return ItemChat(
+                                chat: isMe ? 0 : 1,
+                                avatar: isMe ? null : avatar,
+                                message: data['message'] ?? '',
+                                time: formatTimestamp(
+                                  data['created_at'] ?? Timestamp.now(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

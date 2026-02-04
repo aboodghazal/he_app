@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:health_app/admin_screens/create_container.dart';
@@ -9,11 +11,11 @@ import 'package:health_app/admin_screens/edit_aricle_screen.dart';
 import 'package:health_app/admin_screens/edit_video.dart';
 // import 'package:health_app/admin_screens/edit_article.dart';
 import 'package:health_app/colors.dart';
-import 'package:health_app/firebase_options.dart';
 import 'package:health_app/screens/article_screen.dart';
 import 'package:health_app/screens/categories.dart';
 import 'package:health_app/screens/chat/chat_screen.dart';
 import 'package:health_app/screens/container_screen.dart';
+import 'package:health_app/screens/forget_password.dart';
 import 'package:health_app/screens/login_screen.dart';
 import 'package:health_app/screens/profile_screen.dart';
 import 'package:health_app/screens/search_screen.dart';
@@ -44,8 +46,8 @@ void main() async {
   }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('555555555    $fcmToken');
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
+  // print('555555555    $fcmToken');
 
   if (user == null) {
     isLogin = false;
@@ -53,19 +55,22 @@ void main() async {
   } else {
     isLogin = true;
   }
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.manual,
-    overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  // SystemChrome.setEnabledSystemUIMode(
+  //   SystemUiMode.manual,
+  //   overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+  // );
+  // // Optional: set a background color for system bars
+  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //   systemNavigationBarColor: Colors.white, // your desired color
+  //   statusBarColor: Colors.transparent,
+  //   statusBarIconBrightness: Brightness.dark,
+  //   systemNavigationBarIconBrightness: Brightness.dark,
+  // ));
+  runApp(
+    MyApp(), // Wrap your app
   );
-  // Optional: set a background color for system bars
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.white, // your desired color
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarIconBrightness: Brightness.dark,
-  ));
-  runApp(const MyApp());
+  ;
 }
 
 class MyApp extends StatefulWidget {
@@ -96,76 +101,81 @@ class MyAppState extends State<MyApp> {
       statusBarColor: primary, // status bar color
     ));
 
-    return GetMaterialApp(
-      locale: const Locale('ar'),
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: appSupportedLocales,
-      title: 'تطبيق الرعاية التلطيفية',
-      theme: ThemeData(
-          primarySwatch: primary,
-          fontFamily: 'Amiri',
-          textTheme: ThemeData().textTheme.copyWith(
-              headlineSmall: const TextStyle(
-                color: Colors.blue,
-                fontSize: 24,
-                fontFamily: 'ElMessiri',
-                fontWeight: FontWeight.bold,
-              ),
-              titleLarge: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: 'ElMessiri',
-                fontWeight: FontWeight.w600,
-              ))),
+    return ScreenUtilInit(
+      designSize: Size(430, 950),
+      child: GetMaterialApp(
+        locale: const Locale('ar'),
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: appSupportedLocales,
+        title: 'تطبيق الرعاية التلطيفية',
+        theme: ThemeData(
+            primarySwatch: primary,
+            fontFamily: 'Amiri',
+            textTheme: ThemeData().textTheme.copyWith(
+                headlineSmall: const TextStyle(
+                  color: Colors.blue,
+                  fontSize: 24,
+                  fontFamily: 'ElMessiri',
+                  fontWeight: FontWeight.bold,
+                ),
+                titleLarge: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'ElMessiri',
+                  fontWeight: FontWeight.w600,
+                ))),
 
-      // home: ,
-      initialRoute: '/',
-      // routes: {
-      //   '/': (ctx) => const SplashScreen(),
-      //   AppRoute.categoryDetails: (ctx) => const CategoryDetails(),
-      //   AppRoute.categories: (ctx) => const Categories(),
-      //   AppRoute.homePage: (ctx) => const ContainerScreen(),
-      //   AppRoute.adminHomePage: (ctx) => const AdminContainerScreen(),
-      //   AppRoute.login: (ctx) => const Login(),
-      //   AppRoute.signup: (ctx) => const SignUp(),
-      //   AppRoute.profile: (ctx) => const ProfileScreen(),
-      //   AppRoute.userProfile: (ctx) => const UserProfile(),
-      //   AppRoute.searchPage: (ctx) => const SearchScreen(),
-      //   AppRoute.chatScreen: (ctx) => const ChatScreen(),
-      //   AppRoute.createContainer: (ctx) => const CreateContainer(),
-      //   AppRoute.showVideo: (ctx) => const VideoApp(),
-      //   AppRoute.showArticle: (ctx) => const ArticleScreen(),
-      //   // AppRoute.editArticle: (ctx) =>  EditArticleScreen(),
-      // },
-      getPages: [
-        GetPage(name: '/', page: () => const SplashScreen()),
-        GetPage(
-            name: AppRoute.categoryDetails,
-            page: () => const CategoryDetails()),
-        GetPage(name: AppRoute.categories, page: () => const Categories()),
-        GetPage(name: AppRoute.homePage, page: () => const ContainerScreen()),
-        GetPage(
-            name: AppRoute.adminHomePage,
-            page: () => const AdminContainerScreen()),
-        GetPage(name: AppRoute.login, page: () => const Login()),
-        GetPage(name: AppRoute.signup, page: () => const SignUp()),
-        GetPage(name: AppRoute.profile, page: () => const ProfileScreen()),
-        GetPage(name: AppRoute.userProfile, page: () => const UserProfile()),
-        GetPage(name: AppRoute.searchPage, page: () => const SearchScreen()),
-        GetPage(name: AppRoute.chatScreen, page: () => const ChatScreen()),
-        GetPage(
-            name: AppRoute.createContainer,
-            page: () => const CreateContainer()),
-        GetPage(name: AppRoute.showVideo, page: () => const VideoApp()),
-        GetPage(name: AppRoute.showArticle, page: () => const ArticleScreen()),
-        GetPage(name: AppRoute.editArticle, page: () => EditArticleScreen()),
-        GetPage(name: AppRoute.editvideo, page: () => EditVideoWidget()),
-      ],
+        // home: ,
+        initialRoute: '/',
+        // routes: {
+        //   '/': (ctx) => const SplashScreen(),
+        //   AppRoute.categoryDetails: (ctx) => const CategoryDetails(),
+        //   AppRoute.categories: (ctx) => const Categories(),
+        //   AppRoute.homePage: (ctx) => const ContainerScreen(),
+        //   AppRoute.adminHomePage: (ctx) => const AdminContainerScreen(),
+        //   AppRoute.login: (ctx) => const Login(),
+        //   AppRoute.signup: (ctx) => const SignUp(),
+        //   AppRoute.profile: (ctx) => const ProfileScreen(),
+        //   AppRoute.userProfile: (ctx) => const UserProfile(),
+        //   AppRoute.searchPage: (ctx) => const SearchScreen(),
+        //   AppRoute.chatScreen: (ctx) => const ChatScreen(),
+        //   AppRoute.createContainer: (ctx) => const CreateContainer(),
+        //   AppRoute.showVideo: (ctx) => const VideoApp(),
+        //   AppRoute.showArticle: (ctx) => const ArticleScreen(),
+        //   // AppRoute.editArticle: (ctx) =>  EditArticleScreen(),
+        // },
+        getPages: [
+          GetPage(name: '/', page: () => const SplashScreen()),
+          GetPage(
+              name: AppRoute.categoryDetails,
+              page: () => const CategoryDetails()),
+          GetPage(name: AppRoute.categories, page: () => const Categories()),
+          GetPage(name: AppRoute.homePage, page: () => const ContainerScreen()),
+          GetPage(
+              name: AppRoute.adminHomePage,
+              page: () => const AdminContainerScreen()),
+          GetPage(name: AppRoute.login, page: () => const Login()),
+          GetPage(name: AppRoute.signup, page: () => const SignUp()),
+          GetPage(name: AppRoute.profile, page: () => const ProfileScreen()),
+          GetPage(name: AppRoute.userProfile, page: () => const UserProfile()),
+          GetPage(name: AppRoute.searchPage, page: () => const SearchScreen()),
+          GetPage(name: AppRoute.chatScreen, page: () => const ChatScreen()),
+          GetPage(
+              name: AppRoute.createContainer,
+              page: () => const CreateContainer()),
+          GetPage(name: AppRoute.showVideo, page: () => const VideoApp()),
+          GetPage(
+              name: AppRoute.showArticle, page: () => const ArticleScreen()),
+          GetPage(name: AppRoute.editArticle, page: () => EditArticleScreen()),
+          GetPage(name: AppRoute.editvideo, page: () => EditVideoWidget()),
+          GetPage(name: AppRoute.forgetPassword, page: () => ForgetPassword()),
+        ],
+      ),
     );
   }
 }

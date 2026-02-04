@@ -51,55 +51,56 @@ class ContainerScreenState extends State<ContainerScreen> {
           color: Colors.white, //change your color here
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(0),
-        decoration: BoxDecoration(
-            color: AppColors.bacgroundColor,
-            borderRadius: BorderRadius.circular(35),
-            // border: Border.all(color: primary),
-            boxShadow: [
-              BoxShadow(color: primary.shade100, blurRadius: 5, offset: const Offset(3,3))
-            ]
+      bottomNavigationBar: SafeArea(
+  child: Container(
+    margin: const EdgeInsets.fromLTRB(15, 0, 15, 25),
+    decoration: BoxDecoration(
+      color: AppColors.bacgroundColor,
+      borderRadius: BorderRadius.circular(35),
+      boxShadow: [
+        BoxShadow(
+          color: primary.shade100,
+          blurRadius: 5,
+          offset: const Offset(3, 3),
         ),
-        margin: const EdgeInsets.fromLTRB(15, 0, 15, 25),
-        // color: Colors.red,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: GNav(
+      ],
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(8),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallScreen = constraints.maxWidth < 360; // you can tune this
+          return GNav(
             backgroundColor: AppColors.bacgroundColor,
             color: primary,
             activeColor: Colors.white,
             tabBackgroundColor: primary.shade400,
-            gap: 10,
+            gap: 8,
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmallScreen ? 8 : 20,
+              vertical: isSmallScreen ? 12 : 20,
+            ),
             onTabChange: (index) {
               setState(() {
                 selectedTab = index;
-                if (selectedTab == 0) {
-                  title = 'الرئيسية';
-                } else if (selectedTab == 1) {
-                  title = 'الرسائل';
-                } else if(selectedTab == 2) {
-                  title = 'التصنيفات';
-                } else {
-                  title = 'الإعدادات';
-                }
+                if (index == 0) title = 'الرئيسية';
+                else if (index == 1) title = 'الرسائل';
+                else if (index == 2) title = 'التصنيفات';
+                else title = 'الإعدادات';
               });
             },
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             tabs: const [
-              GButton(icon: Icons.home_outlined,
-                text: 'الرئيسية',),
-              GButton(icon: Icons.chat_outlined,
-                  text: 'الرسائل'),
-              GButton(icon: Icons.list_alt_outlined,
-                  text: 'التصنيفات'),
-              GButton(icon: Icons.settings_outlined,
-                  text: 'الإعدادات'),
+              GButton(icon: Icons.home_outlined, text: 'الرئيسية'),
+              GButton(icon: Icons.chat_outlined, text: 'الرسائل'),
+              GButton(icon: Icons.list_alt_outlined, text: 'التصنيفات'),
+              GButton(icon: Icons.settings_outlined, text: 'الإعدادات'),
             ],
-          ),
-        ),
+          );
+        },
       ),
-      body: navBarPages.elementAt(selectedTab),
+    ),
+  ),
+), body: navBarPages.elementAt(selectedTab),
     );
   }
 }
